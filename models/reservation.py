@@ -1,27 +1,22 @@
 from db import db
 
-class RoomModel(db.Model):
+class ReservationModel(db.Model):
     #SQLAlchemy table for db    
-    __tablename__ = 'rooms'
+    __tablename__ = 'reservations'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30))
-    beds = db.Column(db.Integer)
-    img = db.Column(db.LargeBinary)
-    reservations = db.relationship('ItemModel', lazy='dynamic')
+    start_date - db.Column(db.Date)
+    end_date - db.Column(db.Date)
+    user_id = db.Column(db.Integer,  db.ForeignKey('users.id'))
+    room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'))
     #end table
 
-    def __init__(self, _id, name, beds, reserved, images):
+     def __init__(self, _id, name, beds, reserved, images):
         self.id = _id
         self.name = name
         self.beds = beds
         self.reserved = reserved
         self.images = reserved
-
-    @classmethod
-    def find_by_id(cls, id):
-        
-
 
     def json(self):
         return {'name':self.name, 'items': [item.json() for item in self.items.all()]}

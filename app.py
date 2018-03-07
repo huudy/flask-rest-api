@@ -28,6 +28,7 @@ api.add_resource(ItemList, '/items')
 api.add_resource(Store, '/store/<string:name>')
 api.add_resource(StoreList, '/stores')
 api.add_resource(UserRegister, '/register')
+api.add_resource(Room, '/room/<string:name>')
 
 
 if __name__ == '__main__':
