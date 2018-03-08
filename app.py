@@ -11,7 +11,7 @@ from resources.store import Store, StoreList
 app = Flask(__name__, instance_relative_config=True)
 #app.config.from_object('config')
 # app.config.from_pyfile('config.py')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
 
