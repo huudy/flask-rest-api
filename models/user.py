@@ -14,6 +14,8 @@ class User(db.Model):
     created_at = db.Column(db.Date)
     activated = db.Column(db.Boolean)
 
+    reservations = db.relationship('ItemModel', lazy='dynamic')
+
 
 
     def __init__(self, email, password, created_at, activated):
