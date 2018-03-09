@@ -8,6 +8,7 @@ from resources.user import UserRegister
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 from resources.room import Room, RoomList
+from resources.reservation import Reservation
 
 
 app = Flask(__name__, instance_relative_config=True)
@@ -32,6 +33,7 @@ api.add_resource(StoreList, '/stores')
 api.add_resource(UserRegister, '/register')
 api.add_resource(Room, '/room/<string:name>')
 api.add_resource(RoomList, '/rooms')
+api.add_resource(Reservation, '/reserve')
 
 
 if __name__ == '__main__':
