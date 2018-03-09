@@ -16,11 +16,11 @@ class RoomModel(db.Model):
         self.beds = beds
         self.img = img
 
-    @classmethod
-    def find_by_id(cls, id):
-
     def json(self):
         return {'name':self.name, 'beds': self.beds, 'image':self.img }
+
+    @classmethod
+    def find_by_id(cls, id):   
     
     @classmethod
     def find_by_name(cls, name):
