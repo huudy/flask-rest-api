@@ -15,7 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL','sqlite://
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
 
-app.secret_key = os.environ.get('SECRET_KEY')
+app.secret_key = os.environ.get('SECRET_KEY',app.config['SECRET_KEY'])
 api = Api(app)
 
 
