@@ -25,6 +25,7 @@ class UserRegister(Resource):
             return {"message": "User with that username already exists."}, 400
 
         creation_date = datetime.datetime.utcnow()
+        print(data)
         user = User(data['email'], data['password'], creation_date, 0 )
         user.save_to_db()
 
