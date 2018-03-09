@@ -33,4 +33,10 @@ class Reservation(Resource):
 
         data = Item.parser.parse_args()
         reservation = ReservationModel(**data)
+        try:
+            reservation.save_to_db()
+        except:
+            return {"message": "An error occurred inserting the item."}
+
+        return reservation.json()
 
