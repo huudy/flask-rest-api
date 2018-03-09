@@ -5,8 +5,8 @@ class ReservationModel(db.Model):
     __tablename__ = 'reservations'
 
     id = db.Column(db.Integer, primary_key=True)
-    start_date = db.Column(db.Date)
-    end_date = db.Column(db.Date)
+    start_date = db.Column(db.String(10))
+    end_date = db.Column(db.String(10))
 
     user_id = db.Column(db.Integer,  db.ForeignKey('users.id'))
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'))

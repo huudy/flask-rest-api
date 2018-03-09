@@ -14,7 +14,7 @@ class User(db.Model):
     created_at = db.Column(db.Date)
     activated = db.Column(db.Boolean)
 
-    reservations = db.relationship('ItemModel', lazy='dynamic')
+    reservations = db.relationship('ReservationModel', lazy='dynamic')
 
 
 
