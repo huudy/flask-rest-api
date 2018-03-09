@@ -5,8 +5,8 @@ class ReservationModel(db.Model):
     __tablename__ = 'reservations'
 
     id = db.Column(db.Integer, primary_key=True)
-    start_date - db.Column(db.Date)
-    end_date - db.Column(db.Date)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
 
     user_id = db.Column(db.Integer,  db.ForeignKey('users.id'))
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'))
@@ -14,7 +14,7 @@ class ReservationModel(db.Model):
     room = db.relationship('RoomModel')
     #end table
 
-     def __init__(self, start_date, end_date, user_id, room_id):
+    def __init__(self, start_date, end_date, user_id, room_id):
         self.start_date = start_date
         self.end_date = end_date
         self.user_id = user_id

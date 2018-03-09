@@ -6,22 +6,22 @@ class Reservation(Resource):
 
     parser = reqparse.RequestParser()
     parser.add_argument('start_date',
-        type=Date,
+        type=str,
         required=True,
         help="Specify start date"
     )
     parser.add_argument('end_date',
-        type=Date,
+        type=str,
         required=True,
         help="Please specify end date"
     )
     parser.add_argument('user_id',
-        type=Integer,
+        type=int,
         required=True,
         help="Please specify end date"
     )
     parser.add_argument('room_id',
-        type=Integer,
+        type=int,
         required=True,
         help="Please specify end date"
     )
