@@ -8,23 +8,19 @@ class RoomModel(db.Model):
     name = db.Column(db.String(30))
     beds = db.Column(db.Integer)
     img = db.Column(db.LargeBinary)
-    reservations = db.relationship('ItemModel', lazy='dynamic')
+    reservations = db.relationship('ReservationModel', lazy='dynamic')
     #end table
 
-    def __init__(self, _id, name, beds, reserved, images):
-        self.id = _id
+    def __init__(self, name, beds, img):
         self.name = name
         self.beds = beds
-        self.reserved = reserved
-        self.images = reserved
+        self.img = img
 
     @classmethod
     def find_by_id(cls, id):
-        
-
 
     def json(self):
-        return {'name':self.name, 'items': [item.json() for item in self.items.all()]}
+        return {'name':self.name, 'beds': self.beds, 'image':self.img }
     
     @classmethod
     def find_by_name(cls, name):
