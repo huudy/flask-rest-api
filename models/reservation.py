@@ -5,8 +5,8 @@ class ReservationModel(db.Model):
     __tablename__ = 'reservations'
 
     id = db.Column(db.Integer, primary_key=True)
-    start_date = db.Column(db.String(10))
-    end_date = db.Column(db.String(10))
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
 
     user_id = db.Column(db.Integer,  db.ForeignKey('users.id'))
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'))
@@ -29,7 +29,8 @@ class ReservationModel(db.Model):
     
     @classmethod
     def check_dates(cls, start_date, end_date):
-        return cls.query.filter_by(start_date>=start_date).filter_by(end_date<=end_date).first()
+        print('Start: ',start_date,'  End:  ',end_date)
+        return cls.query.filter(start_date>=start_date).filter(end_date<=end_date).first()
     
     def save_to_db(self):
         db.session.add(self)
