@@ -1,18 +1,19 @@
-from db import db
+from mongo import db
 
-class ItemModel(db.Model):
+
+class ItemModel():
 
     #######
     #item to store one to many
 
-    __tablename__ = 'items'
+    # __tablename__ = 'items'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30))
-    price = db.Column(db.Float(precision=2))
+    # id = db.Column(db.Integer, primary_key=True)
+    # name = db.Column(db.String(30))
+    # price = db.Column(db.Float(precision=2))
 
-    store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
-    store = db.relationship('StoreModel')
+    # store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
+    # store = db.relationship('StoreModel')
 
 
 
@@ -26,13 +27,11 @@ class ItemModel(db.Model):
 
     @classmethod
     def find_by_name(cls, name):
-        return cls.query.filter_by(name=name).first()
+        return db.items.find_one({'name':name})
 
     def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()  
+        db.items.insert_one(self)
+        
 
     def delete_from_db(self):
-        db.session.delete(self)
-        db.session.commit()
-        
+        db.items.delete_one(self)

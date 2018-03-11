@@ -4,19 +4,15 @@ from db import db
 import datetime
 
 
-class User(db.Model):
-    TABLE_NAME = 'users'
-    __tablename__ = 'users'
+class User():
+    
+    # id = db.Column(db.Integer, primary_key=True)
+    # email = db.Column(db.String(30))
+    # password = db.Column(db.String(30))
+    # created_at = db.Column(db.Date)
+    # activated = db.Column(db.Boolean)
 
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(30))
-    password = db.Column(db.String(30))
-    created_at = db.Column(db.Date)
-    activated = db.Column(db.Boolean)
-
-    reservations = db.relationship('ReservationModel', lazy='dynamic')
-
-
+    # reservations = db.relationship('ReservationModel', lazy='dynamic')
 
     def __init__(self, email, password, created_at, activated):
         self.email = email
@@ -26,12 +22,11 @@ class User(db.Model):
 
     @classmethod
     def find_by_email(cls, email):
-        return cls.query.filter_by(email=email).first()
+        return  db.users.find_one({'email':email})
 
     @classmethod
     def find_by_id(cls, _id):
-        return cls.query.filter_by(id=_id).first()
+        return db.users.find_one({'_id':_id})
 
     def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()  
+        db.users.insert_one(self) 
