@@ -27,12 +27,10 @@ class Item(Resource):
         #     return {'message': "An item with name '{}' already exists.".format(name)}
 
         data = Item.parser.parse_args()
-        print("DATA: ",data)
         item = ItemModel(name, data['price'], data['store_id'])
         try:
             print(item.json())
             db.items.insert_one(item.json())
-            # item.save_to_db()
         except:
             return {"message": "An error occurred inserting the item."}
 
@@ -40,7 +38,7 @@ class Item(Resource):
 
     @jwt_required()
     def get(self, name):
-        item = ItemModel.find_by_name(name)
+        item = db.items.find_one({'name':name})
         if item:
             return item.json()
         return {'message': 'Item not found'}, 404
@@ -48,18 +46,19 @@ class Item(Resource):
     @jwt_required()
     def put(self, name):
         data = Item.parser.parse_args()
-        item = ItemModel.find_by_name(name)
+        item = db.items.find_one({'name':name})
         if item is None:
             item = ItemModel(name, **data)
         else:
             item.price = data['price']
 
         item.save_to_db()
+        # db.items.insert_one(item.json())
         return item.json()
 
     @jwt_required()
     def delete(self, name):
-        item = Item.find_by_name(name)
+        item = db.items.find_one({'name':name})
         if item:
             item.delete_from_db()
 
