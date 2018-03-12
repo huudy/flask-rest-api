@@ -2,12 +2,11 @@ import os
 from flask import Flask, request
 from flask_restful import Api
 from flask_jwt import JWT
-from flask_pymongo import PyMongo
 
 from mongo import client
 
 from security import authenticate, identity
-from resources.user import UserRegister
+from resources.user import UserRegister, UserLogin
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 from resources.room import Room, RoomList
@@ -42,6 +41,7 @@ api.add_resource(ItemList, '/items')
 api.add_resource(Store, '/store/<string:name>')
 api.add_resource(StoreList, '/stores')
 api.add_resource(UserRegister, '/register')
+api.add_resource(UserLogin, '/login')
 api.add_resource(Room, '/room/<string:name>')
 api.add_resource(RoomList, '/rooms')
 api.add_resource(Reservation, '/reserve')

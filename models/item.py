@@ -3,20 +3,6 @@ from mongo import db
 
 class ItemModel():
 
-    #######
-    #item to store one to many
-
-    # __tablename__ = 'items'
-
-    # id = db.Column(db.Integer, primary_key=True)
-    # name = db.Column(db.String(30))
-    # price = db.Column(db.Float(precision=2))
-
-    # store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
-    # store = db.relationship('StoreModel')
-
-
-
     def __init__(self, name, price, store_id):
         self.name = name
         self.price = price    

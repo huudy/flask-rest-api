@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 from flask_jwt import jwt_required
 from models.item import ItemModel
+from security import login_required
 from mongo import db
 from bson.json_util import dumps
 
@@ -36,11 +37,13 @@ class Item(Resource):
 
         return item.json()
 
-    @jwt_required()
+    @login_required
     def get(self, name):
-        item = db.items.find_one({'name':name})
+        item = dumps(db.items.find_one({'name':name}))
+        #item = ItemModel(item[])
+        print('Item: ',item)
         if item:
-            return item.json()
+            return item
         return {'message': 'Item not found'}, 404
 
     @jwt_required()
