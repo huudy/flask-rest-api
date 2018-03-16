@@ -1,15 +1,6 @@
 from db import db
 
-class RoomModel(db.Model):
-    #SQLAlchemy table for db    
-    __tablename__ = 'rooms'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30))
-    beds = db.Column(db.Integer)
-    img = db.Column(db.LargeBinary)
-    reservations = db.relationship('ReservationModel', lazy='dynamic')
-    #end table
+class RoomModel():
 
     def __init__(self, name, beds, img):
         self.name = name

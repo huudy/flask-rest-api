@@ -27,9 +27,16 @@ class Reservation(Resource):
     )
 
     @jwt_required()
-    def post(self):
-        data = Reservation.parser.parse_args()
-        if ReservationModel.check_dates(data['start_date'], data['end_date']):
+    def post(self, room_id):
+        data = request.get_json()
+        reservations = db.rooms.find({'_id':room_id,
+            'reserved':{
+                '$not': {
+                    '$elemMatch': {'startDate': {'$lte': data['start_date']}, 'endDate': {'$gte':data['end_date']}}
+                }
+             }})
+        
+        if reservations:
             return {'message':'These dates are already reserved'}
 
         reservation = ReservationModel(**data)

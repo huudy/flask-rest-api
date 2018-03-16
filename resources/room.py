@@ -1,16 +1,15 @@
 from flask_restful import Resource
-from flask_jwt import jwt_required
 from models.room import RoomModel
+from mongo import db
+from bson.json_util import dumps
 
 class Room(Resource):
-
     def get(self, name):
-        room = RoomModel.find_by_name(name)
+        room = dumps(db.rooms.find_one({'name':name}))
         if room:
-            return room.json()
+            return room
         return {'message': 'Item not found'}, 404
 
-class RoomList(Resource):
-    
+class RoomList(Resource):    
     def get(self):
-        return {'rooms': [room.json for room in RoomModel.query.all()]}
+        return dumps(db.rooms.find())
