@@ -9,29 +9,28 @@ from bson.json_util import dumps
 
 class UserRegister(Resource):
 
-    parser = reqparse.RequestParser()
-    parser.add_argument('email',
-        type=str,
-        required=True,
-        help="This field cannot be left blank!"
-    )
-    parser.add_argument('password',
-        type=str,
-        required=True,
-        help="This field cannot be left blank!"
-    )
+    # parser = reqparse.RequestParser()
+    # parser.add_argument('email',
+    #     type=str,
+    #     required=True,
+    #     help="This field cannot be left blank!"
+    # )
+    # parser.add_argument('password',
+    #     type=str,
+    #     required=True,
+    #     help="This field cannot be left blank!"
+    # )
 
     def post(self):
-        data = UserRegister.parser.parse_args()
+        data = request.get_json()
+        print(data)
 
         if db.users.find_one({'email':data['email']}):
             return {"message": "User with that username already exists."}, 400
 
-        creation_date = datetime.datetime.utcnow()
         hashed_password = generate_password_hash(data['password'], method='sha256')
-        print(data)
-
-        user = User(data['email'], hashed_password, creation_date, 0 )
+        
+        user = User(data['email'], hashed_password, 0 )
 
         db.users.insert_one(user.json())
 

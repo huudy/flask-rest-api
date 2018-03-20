@@ -25,7 +25,7 @@ def identity(payload):
 
 def login_required(func):
         @functools.wraps(func)
-        def check_token(self,name):
+        def check_token(self,*name):
             token = request.headers.get('Authorization')
             print('HEad:',token)
             

@@ -5,10 +5,10 @@ import functools
 
 class User():
 
-    def __init__(self, email, password, created_at, activated):
+    def __init__(self, email, password, activated,*created_at):
         self.email = email
         self.password = password
-        self.created_at = created_at
+        self.created_at =  datetime.datetime.utcnow()
         self.activated = activated
 
 

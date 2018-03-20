@@ -1,49 +1,47 @@
+from flask import request
 from flask_restful import Resource, reqparse
-from flask_jwt import jwt_required
+from security import login_required
 from models.reservation import ReservationModel
+from mongo import db
+from bson.json_util import dumps
+from bson.objectid import ObjectId
 
 class Reservation(Resource):
-
-    parser = reqparse.RequestParser()
-    parser.add_argument('start_date',
-        type=lambda x: datetime.strptime(x,'%Y-%m-%dT%H:%M:%S'),
-        required=True,
-        help="Specify start date"
-    )
-    parser.add_argument('end_date',
-        type=lambda x: datetime.strptime(x,'%Y-%m-%dT%H:%M:%S'),
-        required=True,
-        help="Please specify end date"
-    )
-    parser.add_argument('user_id',
-        type=int,
-        required=True,
-        help="Please specify end date"
-    )
-    parser.add_argument('room_id',
-        type=int,
-        required=True,
-        help="Please specify end date"
-    )
-
-    @jwt_required()
-    def post(self, room_id):
+    # @login_required
+    def post(self):
         data = request.get_json()
-        reservations = db.rooms.find({'_id':room_id,
+       
+        room = db.rooms.find({'_id':ObjectId(data['room_id'])})
+        
+          
+        reservations = db.rooms.find({'_id':ObjectId(data['room_id']),
             'reserved':{
                 '$not': {
-                    '$elemMatch': {'startDate': {'$lte': data['start_date']}, 'endDate': {'$gte':data['end_date']}}
+                    '$elemMatch': {'startDate': {'$lte': data['start_date']}, 'endDate': {'$gte':data['start_date']}}
                 }
              }})
         
-        if reservations:
-            return {'message':'These dates are already reserved'}
+        
+        
+        print('Reservations: ', dumps(reservations))
+
+
+        # if reservations:
+        #     return {'message':'These dates are already reserved'}
 
         reservation = ReservationModel(**data)
-        try:
-            reservation.save_to_db()
-        except:
-            return {"message": "An error occurred inserting the item."}
+        # print('Res: ',reservation.json())
+        # try:
+        print('Inserting')
+        mainres = db.reservations.insert_one(reservation.json()).inserted_id()
+        print(ObjectId(mainres))
+        db.users.update_one({'_id':ObjectId(data['user_id'])}, {'$push': {'reservations':reservation.json()}})
+        # print(dumps(userres))
+        db.rooms.update_one({'_id':ObjectId(data['room_id'])}, {'$push': {'reserved':reservation.json()}})
 
-        return reservation.json()
+            # print('Inserted main:',dumps(mainres), ' userres: ', dumps(userres), 'roomres: ', dumps(roomres))
+        # except:
+        #     return {"message": "An error occurred inserting the item."}
+
+        return {'Reserved':reservation.json()}
 
