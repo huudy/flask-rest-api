@@ -2,11 +2,8 @@ import jwt
 import functools
 from werkzeug.security import safe_str_cmp
 from models.user import User
-from mongo import db
 from flask import request, current_app
 from werkzeug.security import check_password_hash
-
-
 
 def authenticate(email, password):
     user = db.users.find_one({'email':email})

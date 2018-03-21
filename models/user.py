@@ -2,15 +2,15 @@ import jwt
 import datetime
 from flask import current_app
 import functools
+from mongoengine import *
 
-class User():
+class User(Document):
 
-    def __init__(self, email, password, activated,*created_at):
-        self.email = email
-        self.password = password
-        self.created_at =  datetime.datetime.utcnow()
-        self.activated = activated
-
+    email = StringField(required=True, max_length=30)
+    password = StringField(required=True, max_length=100)
+    created_at = DateTimeField(default=datetime.datetime.utcnow)
+    activated = BooleanField(default=False)
+    token = StringField(default="")
 
     def json(self):
         return {'email':self.email,'password':self.password,'created_at':self.created_at,'activated':self.activated}

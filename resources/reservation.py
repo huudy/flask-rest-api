@@ -1,8 +1,7 @@
 from flask import request
-from flask_restful import Resource, reqparse
+from flask_restful import Resource
 from security import login_required
 from models.reservation import ReservationModel
-from mongo import db
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 
@@ -11,30 +10,24 @@ class Reservation(Resource):
     def post(self):
         data = request.get_json()
        
-        room = db.rooms.find({'_id':ObjectId(data['room_id'])})
-        
-          
-        reservations = db.rooms.find({'_id':ObjectId(data['room_id']),
-            'reserved':{
-                '$not': {
-                    '$elemMatch': {'startDate': {'$lte': data['start_date']}, 'endDate': {'$gte':data['start_date']}}
-                }
-             }})
-        
-        
-        
+        reservations = db.rooms.find_one({
+            '_id':ObjectId(data['room_id'])}).aggregate([
+                {'$unwind' : { "$reserved" } },
+                {'$match': {'reserved':{ 'startDate': {'$lte': data['start_date'][:10] }, 'endDate': { '$gte':data['start_date'][:10] }}}}
+            ])
+            
+
         print('Reservations: ', dumps(reservations))
 
+        if reservations:
+            return {'message':'These dates are already reserved'}, 400
 
-        # if reservations:
-        #     return {'message':'These dates are already reserved'}
-
-        reservation = ReservationModel(**data)
-        # print('Res: ',reservation.json())
+        reservation = ReservationModel(data['start_date'][:10], data['end_date'][:10], data['user_id'], data['room_id'])
+        
         # try:
         print('Inserting')
-        mainres = db.reservations.insert_one(reservation.json()).inserted_id()
-        print(ObjectId(mainres))
+        made_res = db.reservations.insert_one(reservation.json())
+        print(made_res)
         db.users.update_one({'_id':ObjectId(data['user_id'])}, {'$push': {'reservations':reservation.json()}})
         # print(dumps(userres))
         db.rooms.update_one({'_id':ObjectId(data['room_id'])}, {'$push': {'reserved':reservation.json()}})

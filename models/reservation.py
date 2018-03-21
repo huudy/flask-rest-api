@@ -1,12 +1,13 @@
 import datetime
+from mongoengine import *
 
-class ReservationModel():
-    def __init__(self, start_date, end_date, user_id, room_id, *reserved_at):
-        self.start_date = start_date
-        self.end_date = end_date
-        self.user_id = user_id
-        self.room_id = room_id
-        self.reserved_at = datetime.datetime.utcnow()
+class ReservationModel(Document):
+
+    start_date = StringField(required=True)
+    end_date = StringField(required=True)
+    user_id = StringField(required=True)
+    room_id = StringField(required=True)
+    reserved_at = DateTimeField(default=datetime.datetime.utcnow)
 
     def json(self):
         return {'start_date':self.start_date, 'end_date': self.end_date, 'user_id': self.user_id, 'room_id':self.room_id}

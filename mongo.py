@@ -1,10 +1,11 @@
-from pymongo import MongoClient
-from bson.objectid import ObjectId
+from mongoengine import *
 
-client = MongoClient('localhost', 27017)
+connect('FlaskMongo')
 
-db = client.FlaskMongo
-# Rooms = db.rooms
+# client = MongoClient('localhost', 27017)
+
+# db = client.FlaskMongo
+# # Rooms = db.rooms
 
 # room = {'name':'CosyCorner'}
 
