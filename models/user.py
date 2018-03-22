@@ -3,6 +3,7 @@ import datetime
 from flask import current_app
 import functools
 from mongoengine import *
+from itsdangerous import URLSafeTimedSerializer
 
 class User(Document):
 
@@ -32,5 +33,10 @@ class User(Document):
         except Exception as e:
             return e
     
-    
-            
+    @classmethod
+    def generate_confirmation_token(self,email):
+        serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        return serializer.dumps(email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+   
+                
+                
