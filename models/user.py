@@ -12,6 +12,7 @@ class User(Document):
     created_at = DateTimeField(default=datetime.datetime.utcnow)
     activated = BooleanField(default=False)
     token = StringField(default="")
+    reservations = ListField()
 
     def json(self):
         return {'email':self.email,'password':self.password,'created_at':self.created_at,'activated':self.activated}
