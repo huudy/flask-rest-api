@@ -1,15 +1,16 @@
 import os
 from flask import Flask, request
 from flask_restful import Api
-from flask_jwt import JWT
 from resources.user import UserRegister, UserLogin, ConfirmEmail
 from resources.room import Room, RoomList
 from resources.reservation import Reservation
+from flask_cors import CORS
 from mongoengine import *
 connect('FlaskMongo')
 
 
 app = Flask(__name__, instance_relative_config=True)
+CORS(app)
 
 #GEtting proper config for dev
 is_prod = os.environ.get('IS_HEROKU', None)

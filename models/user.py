@@ -6,8 +6,8 @@ from mongoengine import *
 from itsdangerous import URLSafeTimedSerializer
 
 class User(Document):
-
-    email = StringField(required=True, max_length=30)
+    
+    email = EmailField(required=True, max_length=30)
     password = StringField(required=True, max_length=100)
     created_at = DateTimeField(default=datetime.datetime.utcnow)
     activated = BooleanField(default=False)
