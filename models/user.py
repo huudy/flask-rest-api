@@ -4,6 +4,7 @@ from flask import current_app
 import functools
 from mongoengine import *
 from itsdangerous import URLSafeTimedSerializer
+from werkzeug.security import generate_password_hash
 
 class User(Document):
     
@@ -14,8 +15,10 @@ class User(Document):
     token = StringField(default="")
     reservations = ListField()
 
+    def set_pass(self, password):
+        self.password = generate_password_hash(password)
     def json(self):
-        return {'email':self.email,'password':self.password,'created_at':self.created_at,'activated':self.activated}
+        return {'email':self.email,'password':generate_password_hash(self.password, method='sha256'),'created_at':self.created_at,'activated':self.activated}
 
     @classmethod
     def generate_token(self, user_id):

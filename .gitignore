@@ -3,3 +3,4 @@ instance/
 resources/__pycache__/
 models/__pycache__/
 data.db
+.vscode/

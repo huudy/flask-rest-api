@@ -16,5 +16,5 @@ class RoomList(Resource):
     def get(self):
         print('Getting rooms')
         roomList = Rooms.objects().to_json()
-                # print(roomList)
+        print(roomList)
         return roomList

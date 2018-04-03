@@ -8,6 +8,7 @@ from flask_restful import Resource, reqparse
 from models.user import User
 from bson.json_util import dumps
 from itsdangerous import URLSafeTimedSerializer
+from security import login_required
 
 class UserRegister(Resource):
 
@@ -15,11 +16,9 @@ class UserRegister(Resource):
         data = request.get_json()
         userInDB = User.objects(email=data['email'])
         if userInDB:
-            return {"message": "User with that username already exists."}, 400
+            return {"message": "User with that username already exists."}, 400  
 
-        hashed_password = generate_password_hash(data['password'], method='sha256')       
         token = User.generate_confirmation_token(data['email'])
-
         confirm_url = url_for('confirmemail', token=token, _external=True)
 
         sg = sendgrid.SendGridAPIClient(apikey=current_app.config['SENDGRID_KEY'])
@@ -36,7 +35,8 @@ class UserRegister(Resource):
         print(response.body)
         print(response.headers)
 
-        user = User(data['email'], hashed_password)
+        user = User(data['email'])
+        user.set_pass(data['password'])
 
         user.save()
 
@@ -47,21 +47,25 @@ class UserLogin(Resource):
     def post(self):
         data = request.get_json()
         user = User.objects.get(email=data['email'])
-        print('ID: ',user.id)
+        print('ID: ',user.id, data['password'],"  ", user.password)
         if user and check_password_hash(user.password, data['password']):
             token = User.generate_token(str(user.id))
             User.objects(email=data['email']).update_one(set__token = token.decode())
             responseObject = {
                 'status': 'success',
                 'message': 'Successfully registered.',
-                'token': token.decode()
+                'token': token.decode(),
+                 'userId': str(user.id)
             }
             return responseObject, 201
         return {'message':'Wrong user/password combination. Please verify!'}
 
-class UserLogout(Resource):
-    def post(self):
-        pass
+class Logout(Resource):
+    @login_required
+    def post(self, user_id):
+        User.objects(id=user_id).update_one(set__token = "")
+        return {'message':'You are logged out!'}, 201
+
 
 class ConfirmEmail(Resource):
     def get(self, token):
