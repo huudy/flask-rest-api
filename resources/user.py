@@ -57,8 +57,9 @@ class UserLogin(Resource):
                 'token': token.decode(),
                  'userId': str(user.id)
             }
+            print('Returning ')
             return responseObject, 201
-        return {'message':'Wrong user/password combination. Please verify!'}
+        return {'message':'Wrong user/password combination. Please verify!'}, 400
 
 class Logout(Resource):
     @login_required
