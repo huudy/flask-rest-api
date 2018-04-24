@@ -6,8 +6,9 @@ from resources.room import Room, RoomList
 from resources.reservation import Reservation
 from flask_cors import CORS
 from mongoengine import *
+print("SOME")
 connect('FlaskMongo')
-
+print("SOME")
 
 app = Flask(__name__, instance_relative_config=True)
 CORS(app)
