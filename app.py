@@ -6,6 +6,7 @@ from resources.room import Room, RoomList
 from resources.reservation import Reservation
 from flask_cors import CORS
 from mongoengine import *
+is_prod = os.environ.get('IS_HEROKU', None)
 print("SOME")
 connect('FlaskMongo')
 print("SOME")
