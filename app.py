@@ -14,7 +14,7 @@ if is_prod is None:
 
 
 print("On heroku connecting to DB")
-connect('FlaskMongo' host=os.environ.get('MONGODB_URI', None))
+connect('FlaskMongo', host=os.environ.get('MONGODB_URI', None))
 print("Connected")
 
 app = Flask(__name__, instance_relative_config=True)
