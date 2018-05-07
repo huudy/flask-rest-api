@@ -6,6 +6,7 @@ from mongoengine import *
 from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash
 
+
 class User(Document):
     
     email = EmailField(required=True, max_length=30)
@@ -40,7 +41,7 @@ class User(Document):
     @classmethod
     def generate_confirmation_token(self,email):
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        return serializer.dumps(email, salt=current_app.config['SECURITY_PASSWORD_SALT'] or os.environ.get('SECURITY_PASSWORD_SALT'))
+        return serializer.dumps(email, os.environ.get('SECURITY_PASSWORD_SALT') if os.environ.get('SECURITY_PASSWORD_SALT') else salt=current_app.config['SECURITY_PASSWORD_SALT'] )
    
                 
                 
