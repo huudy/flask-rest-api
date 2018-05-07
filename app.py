@@ -6,24 +6,28 @@ from resources.room import Room, RoomList
 from resources.reservation import Reservation
 from flask_cors import CORS
 from mongoengine import *
+
 is_prod = os.environ.get('IS_HEROKU', None)
-if is_prod is None:
-    app.config.from_object('config')
-    app.config.from_pyfile('config.py')
-    connect('FlaksMongo')
-
-
-print("On heroku connecting to DB")
-connect('FlaskMongo', host=os.environ.get('MONGODB_URI', None))
-print("Connected")
 
 app = Flask(__name__, instance_relative_config=True)
 CORS(app)
 
-#GEtting proper config for dev
+
+if is_prod is None:
+    app.config.from_object('config')
+    app.config.from_pyfile('config.py')
+    connect('FlaksMongo')
+    print('connected to local db')
+if is_prod:
+    print('connected to heroku')
+    #connect('FlaskMongo', host=os.environ.get('MONGODB_URI', None))
+
+
+
 
 
 app.secret_key = os.environ.get('SECRET_KEY',app.config['SECRET_KEY'])
+app.security_password_salt = os.environ.get('SECURITY_PASSWORD_SALT', None)
 api = Api(app)
 
 # ENDPOINTS
