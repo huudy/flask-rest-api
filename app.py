@@ -7,18 +7,21 @@ from resources.reservation import Reservation
 from flask_cors import CORS
 from mongoengine import *
 is_prod = os.environ.get('IS_HEROKU', None)
-print("SOME")
-connect('FlaskMongo')
-print("SOME")
+if is_prod is None:
+    app.config.from_object('config')
+    app.config.from_pyfile('config.py')
+    connect('FlaksMongo')
+
+
+print("On heroku connecting to DB")
+connect('FlaskMongo' host=os.environ.get('MONGODB_URI', None))
+print("Connected")
 
 app = Flask(__name__, instance_relative_config=True)
 CORS(app)
 
 #GEtting proper config for dev
-is_prod = os.environ.get('IS_HEROKU', None)
-if is_prod is None:
-    app.config.from_object('config')
-    app.config.from_pyfile('config.py')
+
 
 app.secret_key = os.environ.get('SECRET_KEY',app.config['SECRET_KEY'])
 api = Api(app)
