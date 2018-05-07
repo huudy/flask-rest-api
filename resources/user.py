@@ -74,7 +74,7 @@ class ConfirmEmail(Resource):
         try:  
             email = serializer.loads(
                 token,
-                salt=current_app.config['SECURITY_PASSWORD_SALT'],
+                salt= os.environ.get('SECURITY_PASSWORD_SALT', current_app.config['SECURITY_PASSWORD_SALT']),
                 max_age=3600
             )
         except:

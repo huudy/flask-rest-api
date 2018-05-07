@@ -27,7 +27,6 @@ if is_prod:
 
 
 app.secret_key = os.environ.get('SECRET_KEY',app.config['SECRET_KEY'])
-app.security_password_salt = os.environ.get('SECURITY_PASSWORD_SALT', None)
 api = Api(app)
 
 # ENDPOINTS
