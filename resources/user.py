@@ -15,7 +15,7 @@ class UserRegister(Resource):
     def post(self):
         data = request.get_json()
         userInDB = User.objects(email=data['email'])
-        if userInDB is not None:
+        if userInDB is None:
             return {"message": "User with that username already exists."}, 400  
 
         token = User.generate_confirmation_token(data['email'])
