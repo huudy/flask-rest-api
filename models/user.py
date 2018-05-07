@@ -5,6 +5,7 @@ import functools
 from mongoengine import *
 from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash
+import os
 
 
 class User(Document):
