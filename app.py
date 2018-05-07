@@ -20,7 +20,7 @@ if is_prod is None:
     print('connected to local db')
 if is_prod:
     print('connected to heroku')
-    #connect('FlaskMongo', host=os.environ.get('MONGODB_URI', None))
+    connect('FlaskMongo', host=os.environ.get('MONGODB_URI', None))
 
 
 
