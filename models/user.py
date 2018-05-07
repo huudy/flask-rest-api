@@ -42,7 +42,7 @@ class User(Document):
     @classmethod
     def generate_confirmation_token(self,email):
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        salt = os.environ.get('SECURITY_PASSWORD_SALT',None )
+        salt = os.environ.get('SECURITY_PASSWORD_SALT')
         return serializer.dumps(email, salt)   
                 
                 
