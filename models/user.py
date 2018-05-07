@@ -43,6 +43,6 @@ class User(Document):
     def generate_confirmation_token(self,email):
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         print( os.environ.get('SECURITY_PASSWORD_SALT',None ))
-        return serializer.dumps(email, os.environ.get('SECURITY_PASSWORD_SALT', None))   
+        return serializer.dumps(email, os.environ.get('SECURITY_PASSWORD_SALT'))   
                 
                 
